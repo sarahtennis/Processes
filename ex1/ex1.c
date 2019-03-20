@@ -15,7 +15,7 @@ int main(void)
 
     int child = fork();
 
-        if (!child)
+    if (!child)
     {
         // conditional to child process
         // doesn't see the variable assignment within the "parent block" though it happened already
