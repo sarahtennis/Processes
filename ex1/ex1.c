@@ -8,7 +8,32 @@
 
 int main(void)
 {
-    // Your code here
+    int x = 100;
+
+    // only ran once in "pre-Parent" process
+    printf("Before Parent and Child, there was only Zuul.\n");
+
+    int child = fork();
+
+    if (!child)
+    {
+        // conditional to child process
+        // doesn't see the variable assignment within the "parent block" though it happened already
+        printf("Child says, \"x is %d.\"\n", x);
+    }
+    else if (child > 0)
+    {
+        // conditional to parent process
+        // reassigns variable x, but child can't see that
+        x = 44;
+        printf("Parent says, \"x is %d.\"\n", x);
+    }
+    else
+    {
+        fprintf(stderr, "Fork failed\n");
+        // only 0 is standard exit success
+        exit(1);
+    }
 
     return 0;
 }
