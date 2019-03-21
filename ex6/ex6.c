@@ -11,6 +11,13 @@ turns out to only be the case for OSX versions < 10.12. Anything later than that
 and `clock_gettime()` should work just fine. 
 */
 
+/*
+    struct timespec {
+	    time_t   tv_sec; 
+	    long     tv_nsec;
+    }
+*/
+
 #include <stdio.h>
 #include <unistd.h>
 #include <time.h>
@@ -20,7 +27,27 @@ and `clock_gettime()` should work just fine.
 
 int main()
 {
-    // Your code here
-    
+    long total = 0;
+    long difference;
+
+    for (int x = 0; x < number_iter; x++)
+    {
+        struct timespec start, end;
+
+        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
+
+        write(STDOUT_FILENO, "", 0);
+
+        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
+
+        // convert seconds to nano, add nano
+        difference = BILLION * ((long)end.tv_sec - (long)start.tv_sec) + (end.tv_nsec - start.tv_nsec);
+
+        total += difference;
+    }
+
+    // print average in nanoseconds
+    printf("Average time to execute empty write to stdout: %ld nsec\n", total / (long)number_iter);
+
     return 0;
 }
